@@ -14,16 +14,15 @@ def load_neos(neo_csv_path):
     THE 'with' keyword used with the open does exception handling and closes the CSV file
     """
     try:
-        with open(neo_csv_path) as csv_file:
+        with open(neo_csv_path) as f:
             # using 'reader' as a varible name
-            reader = csv.DictReader(csv_file)
+            reader = csv.DictReader(f)
             
              #file open() method then read using the DictReader for csv_file.
 
             neos = []
             for neo in reader:
-                neos.append(
-                    NearEarthObject(
+                neos.append(NearEarthObject(
                         **{
                             'designation':
                             neo.get('pdes', ''),
@@ -35,9 +34,12 @@ def load_neos(neo_csv_path):
                             'hazardous':
                             bool(True if neo.get('pha') == 'Y' else False)
                         }))
-            return neos
+        #return neos
     except Exception as e:
-        print(f"Error: Unexpected error csv not load! , {e}")
+       print("Error: Unexpected error not load! ", e)
+    else:
+        neos.append
+    return neos
 
 
 def load_approaches(cad_json_path):
@@ -47,31 +49,59 @@ def load_approaches(cad_json_path):
     :param cad_json_path: A path to a JSON file containing data about close approaches.
     :return: A list of `CloseApproaches.
     """
+             
     try:
-        with open(cad_json_path) as json_file:
-            reader = json.load(json_file)
+        with open(cad_json_path) as f:
+            reader = json.load(f)
 
-            # Get the fields and data for the close approaches
-            fields = reader.get('fields')
-            data = reader.get('data')
+        fields = reader.get("fields")
+        data = reader.get("data")
+        #self._designation_to_neo = {neo.designation: neo for neo in self._neos}
+        #self._name_to_neo = {neo.name: neo for neo in self._neos if neo.name is not None}
+        reader = [dict(zip(reader["fields"], data)) for data in reader["data"]]
+      
+        approaches = []
+        for approach in reader:
+            approach = CloseApproach(
+                designation=approach.get("des"),
+                time=approach.get("cd"),
+                distance=float(approach.get("dist")),
+                velocity=float(approach.get("v_rel")),
+            )
+            
+            # Creating close approach dictionary wth key map 
+            #reader = [dict(zip(reader["fields"], data)) for data in reader["data"]]
 
-            close_approaches = []
-            for approach in data:
-                # Creating close approach dictionary wth key map
-                close_approach = {
-                    fields[index]: value
-                    for index, value in enumerate(approach)
-                }
-                # Data dictionary loaded with keys "fields" key map & added it to list of close approaches
-                close_approaches.append(
+            
+            # Data dictionary loaded with keys "fields" key map & added it to list of close approaches"
+            
+             
+            # CloseApproach 
+            """        
+            for approach in reader:
+                neo_approaches.append(
                     CloseApproach(
-                        **{
-                            'designation': close_approach.get('des'),
-                            'time': close_approach.get('cd'),
-                            'distance': float(close_approach.get('dist')),
-                            'velocity': float(close_approach.get('v_rel'))
-                        }))
-
-        return close_approaches
+                        designation=approach.get("des"),
+                        time=approach.get("cd"),
+                        distance=float(approach.get("dist")),
+                        velocity=float(approach.get("v_rel")),
+                    )
+                )
+                # Assigning NEOs to CloseApproach
+                if approach.get("des") in self._designation_to_neo.keys():
+                    approach.neo = self._designation_to_neo[approach.get("des")]
+                    self._designation_to_neo[approach.get("des")].approaches.append(approach)
+                elif approach.get("name") in self._name_to_neo.keys():
+                    approach.neo = self._name_to_neo[approach.get("name")]
+                    self._name_to_neo[approach.get("name")].approaches.append(approach)
+                else:
+                    continue"
+                """
+            
+        
     except Exception as e:
-        print('Error: Unexpected error csv_file not load!!', e)
+        print('Error: Unexpected error file not load!!',e )           
+    else:
+        approaches.append(approach)
+    return approaches
+        
