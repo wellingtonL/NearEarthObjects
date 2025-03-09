@@ -37,8 +37,8 @@ def load_neos(neo_csv_path):
         
     except Exception as e:
        print("Error: Unexpected error not load! ", e)
-    else:
-        neos.append(neo)
+    
+    neos.append(neo)
     return neos
 
 
