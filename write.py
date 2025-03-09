@@ -24,11 +24,30 @@ def write_to_csv(results, filename):
     :param results: An iterable of `CloseApproach` objects.
     :param filename: A Path-like object pointing to where the data should be saved.
     """
+    # TODO: Write the results to a CSV file, following the specification in the instructions.
+
     fieldnames = (
         'datetime_utc', 'distance_au', 'velocity_km_s',
         'designation', 'name', 'diameter_km', 'potentially_hazardous'
     )
-    # TODO: Write the results to a CSV file, following the specification in the instructions.
+    try:
+        with open(filename, 'w') as outfile:
+            writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+            writer.writeheader()
+            for approach in results:
+                writer.writerow({
+                    'datetime_utc': approach.time,
+                    'distance_au': approach.distance,
+                    'velocity_km_s': approach.velocity,
+                    'designation': approach.neo.designation,
+                    'name': approach.neo.name,
+                    'diameter_km': approach.neo.diameter,
+                    'potentially_hazardous': approach.neo.hazardous
+                })
+                writer.writerow(outfile)
+    except Exception as e:
+        print(f"An error occurred)", e)
+        return None            
 
 
 def write_to_json(results, filename):
@@ -42,4 +61,23 @@ def write_to_json(results, filename):
     :param results: An iterable of `CloseApproach` objects.
     :param filename: A Path-like object pointing to where the data should be saved.
     """
-    # TODO: Write the results to a JSON file, following the specification in the instructions.
+        # TODO: Write the results to a JSON file, following the specification in the instructions.
+    try:
+        data = []
+        for approach in results:
+            data.append({
+                'datetime_utc': approach.time,
+                'distance_au': approach.distance,
+                'velocity_km_s': approach.velocity,
+                'neo': {
+                    'designation': approach.neo.designation,
+                    'name': approach.neo.name,
+                    'diameter_km': approach.neo.diameter,
+                    'potentially_hazardous': approach.neo.hazardous
+                }
+            })
+        with open(filename, 'w') as outfile:
+            json.dump(data, outfile, indent=2)
+    except Exception as e:
+        print(f"An error occurrede", e)
+        return None 
