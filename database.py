@@ -46,7 +46,7 @@ class NEODatabase:
         self._name_to_neo = name
         self.link_neos_and_approaches
 
-        # self._pdes_to_index = {neo.designation: index for index, neo in enumerate(self._neos)}
+        self._pdes_to_index = {neo.designation: index for index, neo in enumerate(self._neos)}
 
     
     def link_neos_and_approaches(self):
@@ -56,16 +56,17 @@ class NEODatabase:
         }
         to iterate over the index and value of a list in Python, you can use the enumerate() function.
         """
+        pdes_to_index_map = {neo.designation: index
+            for index, neo in enumerate(self._neos)
+        }    
             
         for approach in self._approaches:
-            neo = self._des_to_neo.get(approach.designation)
-            if approach.designation in self._pdes_to_index.keys():
-                approach.neo = self._neos[self._pdes_to_index[approach.designation]]
-                self.neos[self._pdes_to_index(approach.designation)].approaches.append(approach)
+            #neo = self._des_to_neo.get(approach.designation)
+            if approach.designation in self._pdes_to_index_map.keys():
+                approach.neo = self._neos[self._pdes_to_index_map.get(approach._designation)]
+                self.neos[self._pdes_to_index_map.get(approach.designation)].approaches.append(approach)
                 # approach.neo = neos
-                neo.approaches.append(approach)
-                approach.neo = neo
-            
+                           
             """
             if approach.designation in self._pdes_to_index.keys():
                 approach.neo = self._neos[self._pdes_to_index[approach.designation]]
@@ -75,16 +76,9 @@ class NEODatabase:
         # TODO: What additional auxiliary data structures will be useful?
 
         # TODO: Link together the NEOs and their close approaches.
-        self._des_to_neo = {neo.designation: neo for neo in self._neos}
-        self._name_to_neo = {neo.name: neo for neo in self._neos if neo.name is not None}
-
-
-        """
-        self._neos_to_designation = {neo.designation: neo for neo in self._neos
-        }
-            self._neos_to_names = {neo.name: neo for neo in self._neos}
-        """
-
+        self._neos_to_designation = {neo.designation: neo for neo in self._neos}
+        self._neo_to_names = {neo.name: neo for neo in self._neos if neo.name is not None}
+        
 
     def get_neo_by_designation(self, designation):
         """Find and return an NEO by its primary designation.
@@ -100,8 +94,8 @@ class NEODatabase:
         :return: The `NearEarthObject` with the desired primary designation, or `None`.
         """
         # TODO: Fetch an NEO by its primary designation.
-        return self._des_to_neo.get(designation.capitalize())
-        return 'None'
+        return self._neos_to_designation.get(designation.capitalize())
+        
         
 
     def get_neo_by_name(self, name):
@@ -119,7 +113,7 @@ class NEODatabase:
         :return: The `NearEarthObject` with the desired name, or `None`.
         """
         # TODO: Fetch an NEO by its name.
-        return self._names_to_neo.get(name.capitalize()) 
+        return self._neos_to_names.get(name.capitalize()) 
         # return None
 
     def query(self, filters=()):

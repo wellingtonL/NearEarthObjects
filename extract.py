@@ -15,29 +15,26 @@ def load_neos(neo_csv_path):
     :return: A list of `NearEarthObject`s.
     THE 'with' keyword used with the open does exception handling and closes the CSV file
     """
-    try:
-        with open(neo_csv_path, 'r') as file:
+    
+    with open(neo_csv_path, 'r') as file:
             # using 'reader' as a varible name
-            reader = csv.DictReader(file)
+        reader = csv.DictReader(file)
                        
              #file open() method then read using the DictReader for csv_file.
 
-            neos = []
-            for row in reader:
-                designation = row.get('pdes')
-                name = row.get('name') 
-                diameter = float('nan' if row.get('diameter') =='' else row.get('diameter'))
-                hazardous = bool(True if row.get('pha') == 'Y' else False)
-                neo = NearEarthObject(
+        neos = []
+        for row in reader:  
+            designation = row.get('pdes')
+            name = row.get('name') if ('name') == '' else None
+            diameter = float('nan' if row.get('diameter') =='' else row.get('diameter'))
+            hazardous = bool(True if row.get('pha') == 'Y' else False)
+            neo = NearEarthObject(
                         designation=designation,
                         name = name if name != '' else None,
                         diameter = diameter,
                         hazardous=hazardous
-                    )
-        
-    except Exception as e:
-       print("Error: Unexpected error not load! ", e)
-    
+                        ) 
+         
     neos.append(neo)
     return neos
 

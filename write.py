@@ -1,3 +1,4 @@
+
 """Write a stream of close approaches to CSV or to JSON.
 
 This module exports two functions: `write_to_csv` and `write_to_json`, each of
@@ -34,17 +35,19 @@ def write_to_csv(results, filename):
         with open(filename, 'w') as outfile:
             writer = csv.DictWriter(outfile, fieldnames=fieldnames)
             writer.writeheader()
-            for approach in results:
-                writer.writerow({
-                    'datetime_utc': approach.time,
-                    'distance_au': approach.distance,
-                    'velocity_km_s': approach.velocity,
-                    'designation': approach.neo.designation,
-                    'name': approach.neo.name,
-                    'diameter_km': approach.neo.diameter,
-                    'potentially_hazardous': approach.neo.hazardous
-                })
-                writer.writerow(outfile)
+            for row in results:
+                ca_data = row.serialize()
+                neo_data = row.neo.serialize()
+                data={
+                    'datetime_utc': ca_data.get('datetime_utc'),
+                    'distance_au': ca_data.get('distance_au'),
+                    'velocity_km_s': ca_data.get('velocity_km_s'),
+                    'designation': neo_data.get('designation'),
+                    'name': '' if neo_data.get('name')is None else neo_data.get('name'),
+                    'diameter_km': neo_data.get('diameter_km'),
+                    'potentially_hazardous': neo_data.get('potentially_hazardous')
+                }
+                writer.writerow(data)
     except Exception as e:
         print(f"An error occurred)", e)
         return None            
@@ -64,20 +67,25 @@ def write_to_json(results, filename):
         # TODO: Write the results to a JSON file, following the specification in the instructions.
     try:
         data = []
-        for approach in results:
-            data.append({
-                'datetime_utc': approach.time,
-                'distance_au': approach.distance,
-                'velocity_km_s': approach.velocity,
-                'neo': {
-                    'designation': approach.neo.designation,
-                    'name': approach.neo.name,
-                    'diameter_km': approach.neo.diameter,
-                    'potentially_hazardous': approach.neo.hazardous
-                }
-            })
+        for result in results:
+            ca_data = result.serialize()
+            neo_data = result.neo.serialize()
+
+            row = {
+                'datetime_utc': ca_data.get('datetime_utc'),
+                'distance_au': ca_data.get('distance_au'),
+                'velocity_km_s': ca_data.get('velocity_km_s'),
+                
+                'neo':{
+                    'designation': neo_data.get('designation'),
+                    'name': '' if neo_data.get('name') is None else neo_data.get('name'),
+                    'diameter_km':neo_data.get('diameter_km'),
+                    'potentially_hazardous': neo_data.get('potentially_hazardous')
+                  }
+            }
+            data.append(row)
         with open(filename, 'w') as outfile:
             json.dump(data, outfile, indent=2)
     except Exception as e:
-        print(f"An error occurrede", e)
-        return None 
+        print(f"An error occurred", e)
+    
