@@ -20,16 +20,17 @@ def load_neos(neo_csv_path):
             
         #file open() method then read using the DictReader for csv_file.
         for neo in reader: 
-            neo['designation']= neo['pdes'] or ''
-            neo['name'] = neo['name'] or None
-            neo['diameter'] = float(neo['diameter']) if neo['diameter'] else None
-            neo['pha'] = False if neo['pha'] in ['', 'N'] else True
+            neo['designation']= neo['pdes'] 
+            neo['name'] = neo['name'] 
+            neo['diameter'] = float if neo['diameter'] != '' else None
+            neo['hazardous'] = bool(True if neo['pha'] == 'Y' else False)  
+            neo['pha'] = neo['hazardous']
             try:
                 neo = NearEarthObject(
-                    designation = neo['pdes'],
-                    name = neo['name'],
-                    diameter = neo['diameter'],
-                    hazardous = neo['pha'],
+                    designation=neo['designation'],
+                    name=neo['name'],
+                    diameter=neo['diameter'],
+                    hazardous=neo['pha'],
                 )
                 
             except Exception as e:

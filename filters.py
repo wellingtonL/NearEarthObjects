@@ -17,6 +17,7 @@ iterator.
 You'll edit this file in Tasks 3a and 3c.
 """
 import operator
+import datetime
 import itertools
 
 
@@ -87,8 +88,8 @@ class DateFilter(AttributeFilter):
             [datetime.datetime]: Converted time to datetime object.
             
         """
-       return approach.time.date()
-    
+       return datetime.datetime.strptime(approach.time_str, "%Y-%m-%d %H:%M").date()    
+       #return approach.time.date()  # This line is commented out to avoid confusion.    
     
 class DistanceFilter(AttributeFilter):
     """A concrete `AttributeFilter` for the `distance` attribute."""
@@ -108,9 +109,9 @@ class DistanceFilter(AttributeFilter):
         return approach.distance
     
 class VelocityFilter(AttributeFilter):
-   """A concrete `AttributeFilter` for the `velocity` attribute."""
-   @classmethod
-   def get(cls, approach):
+    """A concrete `AttributeFilter` for the `velocity` attribute."""
+    @classmethod
+    def get(cls, approach):
        """A concrete `AttributeFilter` for the `velocity` attribute. 
 
        Args:
@@ -198,7 +199,14 @@ class HazardousFilter(AttributeFilter):
                 if hazardous is not None:
                     filters.append(HazardousFilter(operator.eq, hazardous))
         
-                return filters
+                return (filters)
+    def query(self, filters=()):
+        
+            for approach in self._approaches:
+                if all(map(lambda f: f(approach), filters)):
+                    yield approach
+
+            
 
     
     def limit(iterator, n=None):
@@ -213,10 +221,11 @@ class HazardousFilter(AttributeFilter):
                 :yield: The first (at most) `n` values from the iterator.
             """
                 # TODO: Produce at most `n` values from the given iterator.
-            if n == 0 or n is None:
-                return iterator
-                #return itertools.islice(iterator, n)
+            #return iterator
+            n=None if n == 0 else n 
+               
+            return itertools.islice(iterator, n)
 
                 #if n is None or n == 0:
     
-            return [x for i, x in enumerate(iterator) if i<n]
+            #return [x for i, x in enumerate(iterator) if i<n]

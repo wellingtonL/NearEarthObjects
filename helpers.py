@@ -10,11 +10,12 @@ Although `datetime`s already have human-readable string representations, those
 representations display seconds, but NASA's data (and our datetimes!) don't
 provide that level of resolution, so the output format also will not.
 """
-from datetime import datetime
+
+import datetime
 
 
 def cd_to_datetime(calendar_date):
-    """Convert a NASA-formatted calendar date/time description into a datetime.
+        """Convert a NASA-formatted calendar date/time description into a datetime.
 
     NASA's format, at least in the `cd` field of close approach data, uses the
     English locale's month names. For example, December 31st, 2020 at noon is:
@@ -26,7 +27,7 @@ def cd_to_datetime(calendar_date):
     :param calendar_date: A calendar date in YYYY-bb-DD hh:mm format.
     :return: A naive `datetime` corresponding to the given calendar date and time.
     """
-    return datetime.datetime.strptime(calendar_date, "%Y-%b-%d %H:%M")
+        return datetime.datetime.strptime(calendar_date, "%Y-%b-%d %H:%M")
 
 
 def datetime_to_str(dt):

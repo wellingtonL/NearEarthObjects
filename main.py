@@ -36,17 +36,26 @@ having to wait to reload the database each time. However, it doesn't hot-reload.
 If needed, the script can load data from data files other than the default with
 `--neofile` or `--cadfile`.
 """
+import sys
+import os
+import pathlib
+
+#sys.path.append(os.path.dirname(os.path.join(__file__)))
+#full_path = os.path.join('c:\\neoproject1\\working_project_folder\\filters.py')
+#sys.path.append(os.path.dirname(full_path)) 
+sys.path.append(os.path.dirname(os.path.abspath(__file__))),'working_project_folder'
+
 import argparse
 import cmd
 import datetime
-import pathlib
 import shlex
-import sys
 import time
 
 
+
+
 from extract import load_neos, load_approaches
-from database import NEODatabase
+from database import NEODatabase 
 from filters import create_filters, limit
 from write import write_to_csv, write_to_json
 
@@ -95,9 +104,10 @@ def make_parser():
 
     # Add the `inspect` subcommand parser.
     inspect = subparsers.add_parser('inspect',
-                                    description="Inspect an NEO by primary designation or by name.")
+                                  description="Inspect an NEO by primary designation or by name.")
     inspect.add_argument('-v', '--verbose', action='store_true',
-                         help="Additionally, print all known close approaches of this NEO.")
+                         
+                            help="Additionally, print all known close approaches of this NEO.")
     inspect_id = inspect.add_mutually_exclusive_group(required=True)
     inspect_id.add_argument('-p', '--pdes',
                             help="The primary designation of the NEO to inspect (e.g. '433').")
@@ -109,7 +119,7 @@ def make_parser():
                                   description="Query for close approaches that "
                                               "match a collection of filters.")
     filters = query.add_argument_group('Filters',
-                                       description="Filter close approaches by their attributes "
+                                  description="Filter close approaches by their attributes "
                                                    "or the attributes of their NEOs.")
     filters.add_argument('-d', '--date', type=date_fromisoformat,
                          help="Only return close approaches on the given date, "
@@ -158,7 +168,7 @@ def make_parser():
                                              "to repeatedly run `interact` and `query` commands.")
     repl.add_argument('-a', '--aggressive', action='store_true',
                       help="If specified, kill the session whenever a project file is modified.")
-    return parser, inspect, query
+    return parser, inspect, filters, query, repl
 
 
 def inspect(database, pdes=None, name=None, verbose=False):
