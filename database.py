@@ -1,3 +1,4 @@
+
 """A database encapsulating collections of near-Earth objects and their close approaches.
 
 A `NEODatabase` holds an interconnected data set of NEOs and close approaches.
@@ -20,7 +21,7 @@ class NEODatabase:
     help fetch NEOs by primary designation or by name and to help speed up
     querying for close approaches that match criteria.
     """
-    def __init__(self, neos, verified_approaches):
+    def __init__(self, neos, approaches):
         
 
         """Create a new `NEODatabase`.
@@ -40,13 +41,16 @@ class NEODatabase:
         :param approaches: A collection of `CloseApproach`es.
         """
         self._neos = neos
+        #self._approaches = approaches
+
+        self._neo_by_designation = {neo.designation: neo for neo in self._neos}
+        self._neo_by_name = {neo.name: neo for neo in self._neos if neo.name is not None}
         
-        #self._name_to_neo = {neo.name: neo for neo in self._neos if neo.name is not None}
-        
-        self._approaches = verified_approaches
+        self._approaches =  approaches     
         self.designation_mapping = {}
               
         self.name_map = {}
+
 
         for neo in self._neos:
             self.designation_mapping[neo.designation] = neo
@@ -60,10 +64,13 @@ class NEODatabase:
 
         for approach in self._approaches:
             try:
-                near_earth_o = self.designation_mapping[approach._designation]
-                                            
-                near_earth_o.approaches.append(approach)
-                approach.neo = near_earth_o
+                near_earth= self.designation_mapping[approach._designation]
+                    # collects the neo object with the respective designation saved in the approach object
+                
+                near_earth = self._neo_by_designation[approach._designation]
+                near_earth.approaches.append(approach)
+                approach.neo = near_earth
+
             except:
                 print(f"Neo with the designation {approach._designation} does not exist.")
                 #print(f"Neo with the designation {approach.designation} does not exist.")
@@ -183,7 +190,7 @@ class NEODatabase:
             
         
 
-    def get_neo_by_name(self, name):
+    def get_neo_by_name(self, name):    
         """Find and return an NEO by its name.
 
         If no match is found, return `None` instead.
@@ -198,13 +205,15 @@ class NEODatabase:
         :return: The `NearEarthObject` with the desired name, or `None`.
         """
         # TODO: Fetch an NEO by its name.
+       
         try:
             return self.name_map[name]  
         except KeyError:  # Handle KeyError
-            pass  
+            return None           
         except Exception as e:
             print("Error: Unexpected", e)
-            return ()
+            return None
+        #except KeyError:
             
     def query(self, filters=()):
         """Query close approaches to generate those that match a collection of filters.

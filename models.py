@@ -17,7 +17,7 @@ quirks of the data set, such as missing names and unknown diameters.
 
 You'll edit this file in Task 1.
 """
- 
+
 from helpers import cd_to_datetime, datetime_to_str
 import math
 
@@ -48,7 +48,7 @@ class NearEarthObject:
         # and a missing diameter being represented by `float('nan')`.
         
         self.designation = info.get('designation') if info.get('designation') != '' else None
-        self.name = info.get('name') if info.get('name') != '' else None
+        self.name = str(info.get('name')) if info.get('name') else None
         self.time = cd_to_datetime(info.get('time'))  # TODO: Use the cd_to_datetime function for this attribute.
         self.diameter = float(info.get('diameter'))
 
@@ -107,8 +107,8 @@ class NearEarthObject:
         """
         return {
             "designation": self.designation or '',
-            "name": self.name,
-            "diameter_km_s": self.diameter or float('nan'),
+            "name": self.name or '',
+            "diameter_km": self.diameter or float('nan'),
             "potentially_hazardous": self.hazardous,
         }
     
@@ -137,12 +137,14 @@ class CloseApproach:
         # onto attributes named `_designation`, `time`, `distance`, and `velocity`.
         # You should coerce these values to their appropriate data type and handle any edge cases.
         # The `cd_to_datetime` function will be useful.
-        self._designation = info.get('designation,str', '')
-        self.time = info.get('time', None)  # The time is initially a string.
+        self._designation = info.get('designation','')  # The designation is initially a string.')
+        if self._designation == '':  # The designation is initially a string.
+            self._designation = None
+        #self.time = info.get('time', None)  # The time is initially a string.
         if self.time:
-            self.time = cd_to_datetime(info.get('time'))  # Use the cd_to_datetime function for this attribute.
+            self.time = cd_to_datetime(self.time)  # Use the cd_to_datetime function for this attribute.
         self.distance = info.get('distance', float('nan'))
-        self.velocity = info.get('velocity')       
+        self.velocity = info.get('velocity', float('nan'))       
         # Create an attribute for the referenced NEO, originally None.
         self.neo = None
         
@@ -167,7 +169,7 @@ class CloseApproach:
             return ''
         return_value = f'Time: {datetime_to_str(self.time)}' 
         if self.neo:
-            return_value = f'Name {self.neo.name} Designation {self.neo.designation}'
+            return_value += f'Name {self.neo.name} Designation {self.neo.designation}'
         return return_value# Updated to include formatted time
         
     def __str__(self):
@@ -175,12 +177,14 @@ class CloseApproach:
         # TODO: Use this object's attributes to return a human-readable string representation.
         # The project instructions include one possibility. Peek at the __repr__
         # method for examples of advanced string formatting.
-        return f"A CloseApproach at {self.time('%Y-%m-%d %H:%M')}, {self.neo.fullname} approaches Earth at a distance of {self.distance:.2f} au and a velocity of {self.velocity:.2f} km/s, ')"# #neo={self.neo!r}
-
+        return (f"""A CloseApproach at {self.time_str!r}, {self.neo.fullname} approaches Earth """
+                f"""at a distance of {self.distance:.2f} au and a velocity of"""
+                f""" {self.velocity:.2f} km/s""")
     def __repr__(self):
-        """Return `repr(self)`, a computer-readable string representation of this object."""
-        return f"CloseApproach(time={self.time_str!r}, distance={self.distance:.2f}, " \
-               f"velocity={self.velocity:.2f}, neo={self.neo!r})"
+        ("""Return 'repr(self)`, a computer-readable string representation of this object.""")
+        return (f"CloseApproach(time={self.time_str!r},"
+                f"distance={self.distance:.2f}, velocity={self.velocity:.2f},"
+                f"neo={self.neo!r})")
     
     def serialize(self):
         """Return a dict representation of self attributes.
@@ -188,7 +192,7 @@ class CloseApproach:
             [dict]: Keys associated with self attributes.
         """
         return {
-            "datetime_utc": self.time.strftime('Y-%m-%d %H:%M'),
+            "datetime_utc": self.time.strftime('%Y-%m-%d %H:%M'),
             "distance_au": self.distance or float('nan'),
             "velocity_km_s": self.velocity or float('nan'),
         }

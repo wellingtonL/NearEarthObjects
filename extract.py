@@ -2,6 +2,7 @@
 
 import csv
 import json
+
 from models import NearEarthObject, CloseApproach
 
 
@@ -17,28 +18,20 @@ def load_neos(neo_csv_path):
     with open(neo_csv_path, 'r') as csv_file:
         reader = csv.DictReader(csv_file)
         neos = []
-            
+               
         #file open() method then read using the DictReader for csv_file.
         for neo in reader: 
-            neo['designation']= neo['pdes'] 
-            neo['name'] = neo['name'] 
-            neo['diameter'] = float if neo['diameter'] != '' else None
-            neo['hazardous'] = bool(True if neo['pha'] == 'Y' else False)  
-            neo['pha'] = neo['hazardous']
-            try:
-                neo = NearEarthObject(
-                    designation=neo['designation'],
-                    name=neo['name'],
-                    diameter=neo['diameter'],
-                    hazardous=neo['pha'],
+                        
+            neo=NearEarthObject(
+                designation=neo['pdes'],
+                name=neo['name'], 
+                diameter= neo['diameter'],
+                hazardous= neo['pha'],   
                 )
-                
-            except Exception as e:
-                print(e)
-            else:
-                 neos.append(neo)
+            neos.append(neo)        
             
-    return neos
+    return neos    
+        
     #except Exception as e:
     #   print("Error: Unexpected error not load! ", e)
         
@@ -52,10 +45,10 @@ def load_approaches(cad_json_path):
     :param cad_json_path: A path to a JSON file containing data about close approaches.
     :return: A list of `CloseApproaches.
     """
-      
+    
     with open(cad_json_path) as json_file:
-        reader = json.load(json_file)
-        reader = [dict(zip(reader['fields'], data)) for data in reader['data']]
+        data = json.load(json_file)
+        #item = dict(zip(data['fields'], item)) #for item in data['data']]
         
         #fields = reader.get('fields')
         #data = reader.get('data')
@@ -91,9 +84,18 @@ def load_approaches(cad_json_path):
             #close_approaches.append(approach)
             #Assigning NEOs to CloseApproach
             """
-        approaches = []
-        for neo in reader:
-            
+        approaches = []    
+        for item in data['data']:
+            item = dict(zip(data['fields'], item))
+            approach = CloseApproach(
+                designation=item['des'],
+                time=item['cd'],
+                distance=float(item['dist']),  # convert to float
+                velocity=float(item['v_rel']),  # convert to float
+            )
+            approaches.append(approach)
+             
+    return approaches        
                 # Assigning NEOs to CloseApproach
                 #approach = CloseApproach(
                 #    designation=approach.get("des"),
@@ -105,21 +107,9 @@ def load_approaches(cad_json_path):
                 # Creating close approach dictionary wth key map 
                 #reader = [dict(zip(reader["fields"], data)) for data in reader["data"]] 
             #close_approaches.append(approach)
-            try:
-                approach = CloseApproach(
-                    
-                    designation = neo['des'],
-                    time = neo['cd'],
-                    distance = float(neo['dist']),  # corrected to use 'dist'
-                    velocity = float(neo['v_rel']),  # corrected to use 'v_rel'
-                    #neo = neo['neo']  # Assigning NEOs to CloseApproach
-                    )
-                approaches.append(approach)
-            except Exception as e:
-                 print(e)    
+            
         
-                #return close_approaches  
-        return approaches
     
         
+
 
