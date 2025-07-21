@@ -52,17 +52,16 @@ class NEODatabase:
 
 
         for neo in self._neos:
-            self.designation_map[neo.designation] = neo
+            if neo.designation:
+                self.designation_map[neo.designation] = neo
             if neo.name:
                 #self.get_neo_by_name(neo.name)
                 self.name_map[neo.name] = neo
 
-        #self.neo_by_name = {n.name: n for n in self._neos} # if neo.name is not None}}
-        #self._neo_by_designation = {n.designation: n for n in self._neos}
-        
-
+        # Link each close approach to its corresponding near-Earth object.
         for approach in self._approaches:
-            neo = self.designation_map[approach._designation]
+            if approach.designation in self.designation_map:
+                neo = self.designation_map[approach.designation]
             approach.neo = neo
             neo.approaches.append(approach)
                 #print(f"Neo with the designation {approach.designation} does not exist.")
