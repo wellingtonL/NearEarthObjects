@@ -1,5 +1,6 @@
 
-"""Write a stream of close approaches to CSV or to JSON.
+"""
+Write a stream of close approaches to CSV or to JSON.
 
 This module exports two functions: `write_to_csv` and `write_to_json`, each of
 which accept an `results` stream of close approaches and a path to which to
@@ -16,7 +17,8 @@ import json
 
 
 def write_to_csv(results, filename):
-    """Write an iterable of `CloseApproach` objects to a CSV file.
+    """
+    Write an iterable of `CloseApproach` objects to a CSV file.
 
     The precise output specification is in `README.md`. Roughly, each output row
     corresponds to the information in a single close approach from the `results`
@@ -29,29 +31,22 @@ def write_to_csv(results, filename):
 
     fieldnames = (
         'datetime_utc', 'distance_au', 'velocity_km_s',
-        'designation', 'name', 'diameter_km', 'potentially_hazardous'
-    )
-    try:
-        with open(filename, 'w') as outfile:
-            writer = csv.DictWriter(outfile, fieldnames=fieldnames)
-            writer.writeheader()
-            for row in results:
-                ca_data = row.serialize()
-                neo_data = row.neo.serialize()
-                data={
-                    'datetime_utc': ca_data.get('datetime_utc'),
-                    'distance_au': ca_data.get('distance_au'),
-                    'velocity_km_s': ca_data.get('velocity_km_s'),
-                    'designation': neo_data.get('designation'),
-                    'name': '' if neo_data.get('name')is None else neo_data.get('name'),
-                    'diameter_km': neo_data.get('diameter_km'),
-                    'potentially_hazardous': neo_data.get('potentially_hazardous')
-                }
-                writer.writerow(data)
-    except Exception as e:
-        print(f"An error occurred)", e)
-        return None            
-
+        'designation', 'name', 'diameter_km', 'potentially_hazardous')
+    
+    with open(filename,'w') as csv_outfile:
+        writer_csv = csv.writer(csv_outfile)
+        writer_csv.writerow(fieldnames)
+        for approach in results:
+            row=[
+                approach.time,
+                approach.distance,
+                approach.velocity,
+                approach.neo.designation,
+                approach.neo.name,
+                approach.neo.diameter,
+                approach.neo.hazardous
+                ]
+            writer_csv.writerow(row)
 
 def write_to_json(results, filename):
     """Write an iterable of `CloseApproach` objects to a JSON file.
@@ -66,26 +61,25 @@ def write_to_json(results, filename):
     """
         # TODO: Write the results to a JSON file, following the specification in the instructions.
     try:
-        data = []
-        for result in results:
-            ca_data = result.serialize()
-            neo_data = result.neo.serialize()
-
+        data_list = []
+        for approach in results:
+            
             row = {
-                'datetime_utc': ca_data.get('datetime_utc'),
-                'distance_au': ca_data.get('distance_au'),
-                'velocity_km_s': ca_data.get('velocity_km_s'),
-                
-                'neo':{
-                    'designation': neo_data.get('designation'),
-                    'name': '' if neo_data.get('name') is None else neo_data.get('name'),
-                    'diameter_km':neo_data.get('diameter_km'),
-                    'potentially_hazardous': neo_data.get('potentially_hazardous')
-                  }
+                'datetime_utc': approach.time,
+                'distance_au': approach.distance,
+                'velocity_km_s': approach.velocity,
+                'neo': {
+                    'designation': approach._designation,
+                    'name': approach.neo.name,
+                    'diameter_km': approach.neo.diameter,
+                    'potentially_hazardous': approach.neo.hazardous
+                }
             }
-            data.append(row)
-        with open(filename, 'w') as outfile:
-            json.dump(data, outfile, indent=2)
+            data_list.append(row)
+        json_obj=json.dump(data_list, json_outfile, indent=5)    
+
+        with open(filename, 'w') as json_outfile:
+            json_outfile.write(json_obj)
     except Exception as e:
         print(f"An error occurred", e)
     
