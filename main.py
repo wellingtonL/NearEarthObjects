@@ -81,7 +81,7 @@ def date_fromisoformat(date_string):
     :return: A `datetime.date` correspondingo the given date string.
     """
     try:
-        return datetime.datetime.strptime(date_string, '%Y-%m-%d').date()
+        return datetime.datetime.strptime(date_string, "%Y-%m-%d %H:%M").date()
     except ValueError:
         raise argparse.ArgumentTypeError(f"'{date_string}' is not a valid date. Use YYYY-MM-DD.")
 
@@ -408,6 +408,8 @@ class NEOShell(cmd.Cmd):
 def main():
     """
     Run the main script.
+      
+    
     """
     parser, inspect_parser, query_parser = make_parser()
     args = parser.parse_args()

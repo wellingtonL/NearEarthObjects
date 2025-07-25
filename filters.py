@@ -193,7 +193,9 @@ def create_filters(date=None, start_date=None, end_date=None, distance_min=None,
     :param velocity_min: A minimum relative approach velocity for a matching `CloseApproach`.
     :param velocity_max: A maximum relative approach velocity for a matching `CloseApproach`.
     :param diameter_min: A minimum diameter of the NEO of a matching `CloseApproach`.
-    :param diameter_max: A maximum diameter of the NEO of a matching `CloseApproach`.
+    :para
+    
+    m diameter_max: A maximum diameter of the NEO of a matching `CloseApproach`.
     :param hazardous: Whether the NEO of a matching `CloseApproach` is potentially hazardous.
     :return: A collection of filters for use with `query`.
     """

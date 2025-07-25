@@ -171,7 +171,7 @@ class CloseApproach:
         Return a formatted representation of this `CloseApproac h`'s full name.
         """
         #if self.neo:
-        return f"{self._designation} ({self.neo.name or 'N/A'})"
+        return f"{self.designation} ({self.neo.name or 'N/A'})"
     
         
     def serialize(self):
@@ -223,7 +223,7 @@ class CloseApproach:
                 f""" {self.velocity:.2f} km/s""")
     def __repr__(self):
         ("""Return 'repr(self)`, a computer-readable string representation of this object.""")
-        return (f"CloseApproach(time= {self.time_str!r}, '{self.fullname!r}', "
+        return (f"CloseApproach(time= {self.time_str!r}, {self.fullname!r}, "
                 f"distance={self.distance:.2f}, velocity={self.velocity:.2f},"
                 f"neo={self.neo!r})")
     

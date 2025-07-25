@@ -60,10 +60,10 @@ class NEODatabase:
 
         # Link each close approach to its corresponding near-Earth object.
         for approach in self._approaches:
-            if approach.designation in self.designation_map:
+            #if approach.designation in self.designation_map:
                 neo = self.designation_map[approach.designation]
-            approach.neo = neo
-            neo.approaches.append(approach)
+                approach.neo = neo
+                neo.approaches.append(approach)
                 #print(f"Neo with the designation {approach.designation} does not exist.")
 
 
@@ -156,11 +156,9 @@ class NEODatabase:
                 yield approach
             
         """  
-        if filters:
-            for approach in self._approaches:
-                if all(map(lambda f: f(approach), filters)):
-                    yield approach
-        else:
-            for approach in self._approaches:
-                yield approach
         
+        for approach in self._approaches:
+            flag = False in map(lambda x: x(approach), filters)
+            if not flag:
+                yield approach
+          
