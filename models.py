@@ -86,9 +86,9 @@ class NearEarthObject:
         # If the name is None, return only the designation.
         #name = self.name
         if self.name is None:
-            return f"{self.designation}"
-        else:
             return f"{self.designation} ({self.name})"
+        else:
+            return f"{self.designation}"
 
     def __str__(self):
         """Return `str(self)`."""
@@ -96,17 +96,22 @@ class NearEarthObject:
         # The project instructions include one possibility. Peek at the __repr__
         # method for examples of advanced string formatting.
         #hazard_status = 'is' if self.hazardous else 'is not'
+        """
         if not self.hazardous:
-            hazard = 'not potentially hazardous'
+            hazard = 'is not'
         else: 
-            hazard = 'potentially hazardous' 
+            hazard = 'is' 
         if math.isnan(self.diameter):
             diameter_string = 'diameter unknown' 
         else:
-            diameter_string = f"diameter of {self.diameter:.3f} km"
-              
-        return f"NEO as {self.fullname} {diameter_string} is {hazard} potentially hazardous."
-       
+        diameter_string = f"diameter of {self.diameter:.3f} km"
+        return f"NEO as {self.fullname} has {diameter_string} {hazard} potentially hazardous."
+        """
+        return (f"""{self.fullname} is a near Earth object with a diameter """
+                f"""of {self.diameter:.3f} and """
+                f"""{'is' if self.hazardous else 'is not'} hazardous.""")
+
+
 
     def __repr__(self):
         """Return `repr(self)`, a computer-readable string representation of this object."""
@@ -123,7 +128,7 @@ class NearEarthObject:
             "designation": self.designation or '',
             "name": self.name or '',
             "diameter_km": self.diameter or float('nan'),
-            "potentially_hazardous": self.hazardous,
+            "hazardous": self.hazardous,
         }
     
 
@@ -164,7 +169,7 @@ class CloseApproach:
         except ValueError:
             self.velocity = float('nan')  # The velocity is initially a float.nanone    
         # Create an attribute for the referenced NEO, originally None.
-        self.neo = None
+        self.neo = neo
     @property
     def fullname(self):    
         """
@@ -211,7 +216,8 @@ class CloseApproach:
         # TODO: Use self.designation and self.name to build a fullname for this object.
         #if not self.time:
         #    return ''
-        return datetime_to_str(self.time) if self.time else ''
+        str_time = datetime_to_str(self.time) if self.time else ''
+        return str_time
               
     def __str__(self):
         """Return `str(self)`."""
@@ -222,9 +228,8 @@ class CloseApproach:
                 f"""at a distance of {self.distance:.2f} au and a velocity of"""
                 f""" {self.velocity:.2f} km/s""")
     def __repr__(self):
-        ("""Return 'repr(self)`, a computer-readable string representation of this object.""")
-        return (f"CloseApproach(time= {self.time_str!r}, {self.fullname!r}, "
-                f"distance={self.distance:.2f}, velocity={self.velocity:.2f},"
-                f"neo={self.neo!r})")
+        """Return 'repr(self)`, a computer-readable string representation of this object."""
+        return f"CloseApproach(time= {self.time_str!r}, distance={self.distance:.2f}, "\
+                f"velocity={self.velocity:.2f}, neo={self.neo!r})"
     
    

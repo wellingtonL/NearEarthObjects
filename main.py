@@ -41,7 +41,7 @@ import os
 import sys
 import pathlib
 
-
+#notes:
 #sys.path.append('/Users/lggoo/udacity/intermediatePython3Projects/NeoProject1/ProjectFiles/main.py') # Add the current directory to the path.
 #sys.path.append(os.path.dirname(os.path.join(__file__)))
 #full_path = os.path.join('c:\\Users\\lggoo\\anaconda3\\Udacity\\IntermediatePython3Projects\\NeoProject1\\ProjectFiles\\main.py')
@@ -408,10 +408,10 @@ class NEOShell(cmd.Cmd):
 def main():
     """
     Run the main script.
-      
-    
     """
-    parser, inspect_parser, query_parser = make_parser()
+    
+    print("Welcome to the NEO close approach explorer!")
+    parser, inspect_parser, filters, query_parser, repl = make_parser()
     args = parser.parse_args()
 
     # Extract data from the data files into structured Python objects.
@@ -425,5 +425,5 @@ def main():
     elif args.cmd == 'interactive':
         NEOShell(database, inspect_parser, query_parser, aggressive=args.aggressive).cmdloop()
 
-    if __name__ == '__main__':
-        main()
+if __name__ == '__main__':
+    main() 

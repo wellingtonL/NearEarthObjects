@@ -250,8 +250,5 @@ def limit(iterator, n=None):
     else:
         return islice(iterator, n)
 
-
-
                 #if n is None or n == 0:
-    
-            #return [x for i, x in enumerate(iterator) if i<n]
+                #return [x for i, x in enumerate(iterator) if i<n]
