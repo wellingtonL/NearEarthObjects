@@ -27,7 +27,7 @@ Near Earth Objects must have these attributes:
 •	hazardous: Whether or not this NearEarthObject is potentially hazardous.
 •	approaches: A collection of this NearEarthObjects close approaches to Earth.
 
-  Close Approach Objects must have attributes (or retrievable  properties) for the following names:
+Close Approach Objects must have attributes (or retrievable  properties) for the following names:
 •	time: The date and time, in UTC, at which the NEO passes closest to Earth.
 •	distance: The nominal approach distance, in astronomical units, of the NEO to Earth at the closest point.
 •	velocity: The velocity, in kilometers per second, of the NEO relative to Earth at the closest point.
@@ -140,5 +140,6 @@ Welcome to the NEO close approach explorer!
 - A CloseApproach at 2069-11-08 21:29, '433' approaches Earth at a distance of 0.46 au and a velocity of 4.25 km/s
 - A CloseApproach at 2086-03-11 22:55, '433' approaches Earth at a distance of 0.37 au and a velocity of 4.23 km/s
 - A CloseApproach at 2093-01-31 15:47, '433' approaches Earth at a distance of 0.18 au and a velocity of 5.97 km/s
+
 
 
