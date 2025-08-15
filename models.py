@@ -107,9 +107,8 @@ class NearEarthObject:
         diameter_string = f"diameter of {self.diameter:.3f} km"
         return f"NEO as {self.fullname} has {diameter_string} {hazard} potentially hazardous."
         """
-        return (f"""{self.fullname} is a near Earth object with a diameter """
-                f"""of {self.diameter:.3f} and """
-                f"""{'is' if self.hazardous else 'is not'} hazardous.""")
+        return f"NEO as '{self.fullname}' is a near Earth object with a diameter "\
+                f"of {self.diameter:.3f} and {'is' if self.hazardous else 'is not'} hazardous."
 
 
 
@@ -185,10 +184,10 @@ class CloseApproach:
             Returns:
             [dict]: Keys associated with self attributes.
         """
-        result = {
-            "datetime_utc": datetime_to_str(self.time),
-            "distance_au": self.distance,
-            "velocity_km_s": self.velocity,
+        return {
+            "datetime_utc":self.time.strftime("%Y-%m-%d %H:%M"),
+            "distance_au": self.distance or float('nan'),
+            "velocity_km_s": self.velocity or float('nan'),
             'neo': {
                 'designation': self.neo.designation,
                 'name': self.neo.name,
@@ -214,22 +213,23 @@ class CloseApproach:
         # TODO: Use this object's `.time` attribute and the `datetime_to_str` function to
         # build a formatted representation of the approach time.
         # TODO: Use self.designation and self.name to build a fullname for this object.
-        #if not self.time:
-        #    return ''
-        str_time = datetime_to_str(self.time) if self.time else ''
-        return str_time
+        if not self.time:
+           return ''
+        str_time = f'{datetime_to_str(self.time)}'
+        if self.neo:
+            str_time += f'Name: {self.neo.name}, Designation: {self.neo.designation}' 
+     
               
     def __str__(self):
         """Return `str(self)`."""
         # TODO: Use this object's attributes to return a human-readable string representation.
         # The project instructions include one possibility. Peek at the __repr__
         # method for examples of advanced string formatting.
-        return (f"""A CloseApproach at {self.time_str}, '{self.neo.fullname}' approaches Earth """
-                f"""at a distance of {self.distance:.2f} au and a velocity of"""
-                f""" {self.velocity:.2f} km/s""")
+        return f"A CloseApproach at {self.time_str},  '{self.neo.fullname}' approaches Earth "\
+                 f"at a distance of {self.distance:.2f} au and a velocity of {self.velocity:.2f} km/s." 
     def __repr__(self):
         """Return 'repr(self)`, a computer-readable string representation of this object."""
         return f"CloseApproach(time= {self.time_str!r}, distance={self.distance:.2f}, "\
                 f"velocity={self.velocity:.2f}, neo={self.neo!r})"
     
-   
+    

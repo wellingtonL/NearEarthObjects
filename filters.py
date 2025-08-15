@@ -90,7 +90,7 @@ class DateFilter(AttributeFilter):
     """
     @classmethod
     def get(cls, approach):
-       """
+        """
         Return approach.time converted to datetime.datetime object for the date filter.
         
         Args:
@@ -98,11 +98,11 @@ class DateFilter(AttributeFilter):
         Returns:
             [datetime.datetime]: Converted time to datetime object.
             
-       """
+        """
        #return datetime.datetime.strptime(approach.time_str, "%Y-%m-%d %H:%M").date()    
-       return approach.time.date()  # This line is commented out to avoid confusion.    
-    
-class DistanceFilter(AttributeFilter):
+        return approach.time.date()  # This line is commented out to avoid confusion.    
+     
+class DistanceFilter(AttributeFilter): 
     """
     A concrete `AttributeFilter` for the `distance` attribute.
     """
@@ -127,17 +127,17 @@ class VelocityFilter(AttributeFilter):
     """
     @classmethod
     def get(cls, approach):
-       """
-       A concrete `AttributeFilter` for the `velocity` attribute. 
+        """
+        A concrete `AttributeFilter` for the `velocity` attribute. 
 
-       Args:
+        Args:
         approach (CloseApproach): A CloseApproach object.
-       Returns:
+        Returns: 
         [float]: Returns the velocity of a CloseApproach.
             
         """
 
-       return approach.velocity
+        return approach.velocity
         
 class DiameterFilter(AttributeFilter):
     """
@@ -145,7 +145,7 @@ class DiameterFilter(AttributeFilter):
     """
     @classmethod
     def get(cls, approach): 
-       return approach.neo.diameter 
+        return approach.neo.diameter 
       
 class HazardousFilter(AttributeFilter):
     """
