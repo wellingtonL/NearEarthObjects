@@ -79,7 +79,7 @@ class AttributeFilter:
         raise UnsupportedCriterionError
 
     def __repr__(self):
-        return (f"""{self.__class__.__name__}(op=operator.{self.op.__name__}, value={self.value})""")
+        return f'{self.__class__.__name__}(op=operator.{self.op.__name__}, value={self.value})'
 
 
     #A general superclass for filters on comparable attributes.

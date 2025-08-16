@@ -147,7 +147,7 @@ class CloseApproach:
     """
     # TODO: How can you, and should you, change the arguments to this constructor?
     # If you make changes, be sure to update the comments in this file.
-    def __init__(self, designation='', time='', distance=float('nan'), velocity=float('nan'),neo=None):
+    def __init__(self, designation='', time='', distance=float('nan'), velocity=float('nan'),neo= None):
         """
         Create a new `CloseApproach`.
         """
@@ -213,11 +213,12 @@ class CloseApproach:
         # TODO: Use this object's `.time` attribute and the `datetime_to_str` function to
         # build a formatted representation of the approach time.
         # TODO: Use self.designation and self.name to build a fullname for this object.
-        if not self.time:
-           return ''
-        str_time = f'{datetime_to_str(self.time)}'
-        if self.neo:
-            str_time += f'Name: {self.neo.name}, Designation: {self.neo.designation}' 
+        #if not self.time:
+         #  return ''
+        str_time = datetime_to_str(self.time) if self.time else ''
+        #if self.neo:
+        #    str_time += f' Name: {self.neo.name}, Designation: {self.neo.designation}'
+        return str_time
      
               
     def __str__(self):

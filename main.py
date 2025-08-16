@@ -81,7 +81,7 @@ def date_fromisoformat(date_string):
     :return: A `datetime.date` correspondingo the given date string.
     """
     try:
-        return datetime.datetime.strptime(date_string, "%Y-%m-%d %H:%M").date()
+        return datetime.datetime.strptime(date_string, "%Y-%m-%d").date()
     except ValueError:
         raise argparse.ArgumentTypeError(f"'{date_string}' is not a valid date. Use YYYY-MM-DD.")
 
@@ -411,9 +411,9 @@ def main():
     """
     
     print("Welcome to the NEO close approach explorer!")
-    parser, inspect_parser, filters, query_parser, repl = make_parser()
+    parser, inspect_parser, filters, query_parser, repl= make_parser()
     args = parser.parse_args()
-
+ 
     # Extract data from the data files into structured Python objects.
     database = NEODatabase(load_neos(args.neofile), load_approaches(args.cadfile))
 
