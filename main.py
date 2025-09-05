@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-"""
-Explore a dataset of near-Earth objects and their close approaches to Earth.
+"""Explores dataset of near-Earth objects and their close approaches to Earth.
 
-See `README.md` for a detailed discussion of this project.
+`README.md` has a details of this project.
 
 This script can be invoked from the command line::
 
@@ -37,17 +36,10 @@ having to wait to reload the database each time. However, it doesn't hot-reload.
 If needed, the script can load data from data files other than the default with
 `--neofile` or `--cadfile`.
 """
+
 import os
 import sys
 import pathlib
-
-#notes:
-#sys.path.append('/Users/lggoo/udacity/intermediatePython3Projects/NeoProject1/ProjectFiles/main.py') # Add the current directory to the path.
-#sys.path.append(os.path.dirname(os.path.join(__file__)))
-#full_path = os.path.join('c:\\Users\\lggoo\\anaconda3\\Udacity\\IntermediatePython3Projects\\NeoProject1\\ProjectFiles\\main.py')
-#sys.path.append('c:\\Users\\lggood\\..\\..\\..\\NeoProject1\\ProjectFiles') #os.path.dirname(full_path)) 
-#sys.path.append(os.path.dirname(os.path.abspath(__file__))),'ProjectFiles'
-
 import argparse
 import cmd 
 import datetime
@@ -61,7 +53,6 @@ from filters import create_filters, limit
 from write import write_to_csv, write_to_json
 
 
-
 # Paths to the root of the project and the `data` subfolder.
 PROJECT_ROOT = pathlib.Path(__file__).parent.resolve()
 DATA_ROOT = PROJECT_ROOT / 'data'
@@ -71,8 +62,7 @@ _START = time.time()
 
 
 def date_fromisoformat(date_string):
-    """
-    Return a `datetime.date` corresponding to a string in YYYY-MM-DD format.
+    """Return a `datetime.date` corresponding to a string in YYYY-MM-DD format.
 
     In Python 3.7+, there is `datetime.date.fromisoformat`, but alas - we're
     supporting Python 3.6+.
@@ -87,10 +77,8 @@ def date_fromisoformat(date_string):
 
 
 def make_parser():
-    """
-    Create an ArgumentParser for this script.
-
-    :return: A tuple of the top-level, inspect, and query parsers.
+    """Creates a ArgumentParser for this script.
+    :returning A tuple of the top-level, inspect, and query parsers.
     """
     parser = argparse.ArgumentParser(
         description="Explore past and future close approaches of near-Earth objects."
@@ -173,8 +161,7 @@ def make_parser():
 
 
 def inspect(database, pdes=None, name=None, verbose=False):
-    """
-    Perform the `inspect` subcommand.
+    """Perform the `inspect` subcommand.
 
     This function fetches an NEO by designation or by name. If a matching NEO is
     found, information about the NEO is printed (additionally, information for
@@ -210,16 +197,15 @@ def inspect(database, pdes=None, name=None, verbose=False):
 
 
 def query(database, args):
-    """
-    Perform the `query` subcommand.
+    """Perform the `query` subcommand.
 
-    Create a collection of filters with `create_filters` and supply them to the
+    Collection of filters with `create_filters` and supplies them to the
     database's `query` method to produce a stream of matching results.
 
-    If an output file wasn't given, print these results to stdout, limiting to
-    10 entries if no limit was specified. If an output file was given, use the
-    file's extension to infer whether the file should hold CSV or JSON data, and
-    then write the results to the output file in that format.
+    If an output file not given, print results to stdout, limit to
+    10 entries, if no limit is specified. If an output file is given, use 
+    file's extension to whether the file should hold CSV or JSON data, and
+    writes the results to the output file in that format.
 
     :param database: The `NEODatabase` containing data on NEOs and their close approaches.
     :param args: All arguments from the command line, as parsed by the top-level parser.
@@ -250,8 +236,7 @@ def query(database, args):
 
 
 class NEOShell(cmd.Cmd):
-    """
-    Perform the `interactive` subcommand.
+    """Perform the `interactive` subcommand.
 
     This is a `cmd.Cmd` shell - a specialized tool for command-based REPL sessions.
 
@@ -266,9 +251,9 @@ class NEOShell(cmd.Cmd):
              "Type `help` or `?` to list commands and `exit` to exit.\n")
     prompt = '(neo) '
 
+
     def __init__(self, database, inspect_parser, query_parser, aggressive=False, **kwargs):
-        """
-        Create a new `NEOShell`.
+        """Create a new `NEOShell`.
 
         Creating this object doesn't start the session - for that, use `.cmdloop()`.
 
@@ -286,9 +271,7 @@ class NEOShell(cmd.Cmd):
 
     @classmethod
     def parse_arg_with(cls, arg, parser):
-        """
-        Parse the additional text passed to a command, using a given parser.
-
+        """Parse the additional text passed to a command, using a given parser.
         If any error is encountered (in lexical parsing or argument parsing),
         print the error to stderr and return None.
 
@@ -313,14 +296,11 @@ class NEOShell(cmd.Cmd):
             return None
 
     def do_i(self, arg):
-        """
-        Shorthand for `inspect`.
-        """
+        """Shorthand for `inspect`."""
         self.do_inspect(arg)
 
     def do_inspect(self, arg):
-        """
-        Perform the `inspect` subcommand within the REPL session.
+        """Performs the `inspect` subcommand within the REPL session.
 
         Inspect an NEO by designation or by name:
 
@@ -341,14 +321,11 @@ class NEOShell(cmd.Cmd):
                 verbose=args.verbose)
 
     def do_q(self, arg):
-        """
-        Shorthand for `query`.
-        """
+        """Shorthand for `query`."""
         self.do_query(arg)
 
     def do_query(self, arg):
-        """
-        Perform the `query` subcommand within the REPL session.
+        """Perform the `query` subcommand within the REPL session.
 
         This command behaves the same as the `query` subcommand from the command
         line. For example, to query close approaches on January 1st, 2020:
@@ -373,14 +350,11 @@ class NEOShell(cmd.Cmd):
         if not args:
             return
 
-
         # Run the `inspect` subcommand.
         query(self.db, args)
 
     def do_EOF(self, _arg):
-        """
-        Exit the interactive session.
-        """
+        """Exit the interactive session."""
         return True
 
     # Alternative ways to quit.
@@ -388,9 +362,7 @@ class NEOShell(cmd.Cmd):
     do_quit = do_EOF
 
     def precmd(self, line):
-        """
-        Watch for changes to the files in this project.
-        """
+        """Watch for changes to the files in this project."""
         changed = [f for f in PROJECT_ROOT.glob('*.py') if f.stat().st_mtime > _START]
         if changed:
             print("The following file(s) have been modified since this interactive session began: "
@@ -406,14 +378,12 @@ class NEOShell(cmd.Cmd):
 
 
 def main():
-    """
-    Run the main script.
-    """
+    """Run the main script."""
     
     print("Welcome to the NEO close approach explorer!")
-    parser, inspect_parser, filters, query_parser, repl= make_parser()
+    parser, inspect_parser, query_parser, filters, repel = make_parser()
     args = parser.parse_args()
- 
+
     # Extract data from the data files into structured Python objects.
     database = NEODatabase(load_neos(args.neofile), load_approaches(args.cadfile))
 
@@ -426,4 +396,5 @@ def main():
         NEOShell(database, inspect_parser, query_parser, aggressive=args.aggressive).cmdloop()
 
 if __name__ == '__main__':
-    main() 
+    main()
+    
