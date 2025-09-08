@@ -97,27 +97,32 @@ Welcome to the NEO close approach explorer!
 - A CloseApproach at 2069-11-08 21:29, '433' approaches Earth at a distance of 0.46 au and a velocity of 4.25 km/s
 - A CloseApproach at 2086-03-11 22:55, '433' approaches Earth at a distance of 0.37 au and a velocity of 4.23 km/s
 - A CloseApproach at 2093-01-31 15:47, '433' approaches Earth at a distance of 0.18 au and a velocity of 5.97 km/s
+- 
 
 python main.py query --limit 3
 A CloseApproach  1900-01-01 00:11, '170903' approaches Earth at a distance of 0.09 au and a velocity of 16.75 km/s.
 A CloseApproach  1900-01-01 02:33, '2005 OE3' approaches Earth at a distance of 0.41 au and a velocity of 17.92 km/s.
 A CloseApproach at 1900-01-01 03:13,  '2006 XO4' approaches Earth at a distance of 0.11 au and a velocity of 7.40 km/s.
+
 python main.py query --date 1969-07-29 --limit 3
 Welcome to the NEO close approach explorer!
 A CloseApproach at 1969-07-29 01:47,  '408982' approaches Earth at a distance of 0.36 au and a velocity of 24.24 km/s.
 A CloseApproach at 1969-07-29 13:33,  '2010 MA' approaches Earth at a distance of 0.21 au and a velocity of 8.80 km/s.
 A CloseApproach at 1969-07-29 19:56,  '464798' approaches Earth at a distance of 0.10 au and a velocity of 8.02 km/s.
+
 python main.py query --start-date 2050-01-01 --limit 3
 Welcome to the NEO close approach explorer!
 A CloseApproach at 2050-01-01 04:18,  '2019 AY9' approaches Earth at a distance of 0.31 au and a velocity of 8.31 km/s.
 A CloseApproach at 2050-01-01 06:00,  '162361' approaches Earth at a distance of 0.19 au and a velocity of 9.08 km/s.
 A CloseApproach at 2050-01-01 09:55,  '2009 LW2' approaches Earth at a distance of 0.04 au and a velocity of 19.02 km/s.
+
 python main.py query --start-date 2020-03-01 --end-date 2020-03-31 --min-distance 0.4 --limit 4
 Welcome to the NEO close approach explorer!
 A CloseApproach at 2020-03-01 00:28,  '152561' approaches Earth at a distance of 0.42 au and a velocity of 11.23 km/s.
 A CloseApproach at 2020-03-01 09:28,  '462550' approaches Earth at a distance of 0.47 au and a velocity of 17.19 km/s.
 A CloseApproach at 2020-03-02 21:41,  '2020 QF2' approaches Earth at a distance of 0.45 au and a velocity of 8.79 km/s.
 A CloseApproach at 2020-03-03 00:49,  '2019 TU' approaches Earth at a distance of 0.49 au and a velocity of 5.92 km/s.
+
  python main.py query --max-distance 0.0025 --max-velocity 5 --limit 3
 Welcome to the NEO close approach explorer!
 A CloseApproach at 1949-01-01 02:53,  '2003 YS70' approaches Earth at a distance of 0.00 au and a velocity of 3.64 km/s.
@@ -129,15 +134,18 @@ Welcome to the NEO close approach explorer!
 A CloseApproach at 2000-05-21 10:08,  '7092 (Cadmus)' approaches Earth at a distance of 0.34 au and a velocity of 28.46 km/s.
 A CloseApproach at 2004-05-25 03:54,  '7092 (Cadmus)' approaches Earth at a distance of 0.41 au and a velocity of 30.52 km/s.
 A CloseApproach at 2006-06-10 20:04,  '1866 (Sisyphus)' approaches Earth at a distance of 0.49 au and a velocity of 26.81 km/s.
+
 python main.py query --start-date 2030-01-01 --end-date 2030-01-31 --max-diameter 0.05 --not-hazardous --limit 2
 Welcome to the NEO close approach explorer!
 A CloseApproach at 2030-01-07 20:59,  '2010 GH7' approaches Earth at a distance of 0.46 au and a velocity of 18.84 km/s.
 A CloseApproach at 2030-01-13 07:29,  '2010 AE30' approaches Earth at a distance of 0.06 au and a velocity of 14.00 km/s.
+
 python main.py query --start-date 2021-01-01 --max-distance 0.1 --min-velocity 15 --min-diameter 0.1 --hazardous --limit 3
 Welcome to the NEO close approach explorer!
 A CloseApproach at 2021-01-21 22:56,  '363024' approaches Earth at a distance of 0.07 au and a velocity of 15.31 km/s.
 A CloseApproach at 2021-02-01 22:26,  '2016 CL136' approaches Earth at a distance of 0.04 au and a velocity of 18.06 km/s.
 A CloseApproach at 2021-08-21 15:10,  '2016 AJ193' approaches Earth at a distance of 0.02 au and a velocity of 26.17 km/s.
+
 PS C:\Userpython main.py query --start-date 2021-01-01 --max-distance 0.1 --min-velocity 15 --min-diameter 0.1 --hazardous --limit 3
 Welcome to the NEO close approach explorer!
 A CloseApproach at 2021-01-21 22:56,  '363024' approaches Earth at a distance of 0.07 au and a velocity of 15.31 km/s.
@@ -200,3 +208,4 @@ Saved to output CSV file:
 Saved to output JSON file:
 python main.py query --output results.csv
 python main.py query --start-date 2021-01-01 --max-distance 0.1 --min-velocity 15 --min-diameter 0.1 --hazardous --limit 3 outfile results.json
+
