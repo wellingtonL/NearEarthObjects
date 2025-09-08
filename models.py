@@ -53,11 +53,9 @@ class NearEarthObject:
             return f"{self.designation}"
         else:
             return f"{self.designation} ({self.name})"
-        
+
     def __str__(self):
-        """Return `str(self)`."""
-        # attributes returns a readable string representation. Look at the __repr__
-        
+        """Return `str(self)`. returns a readable string representation."""
         if self.hazardous:
             return f"NEO as {self.fullname} has a diameter "\
                 f"of {self.diameter:.3f} and is potentially hazardous."
@@ -83,7 +81,8 @@ class CloseApproach:
     private attribute, but the referenced NEO is eventually replaced in the
     `NEODatabase` constructor.
     """
-    def __init__(self, designation='', time='', distance=float('nan'), velocity=float('nan'), neo=None):
+    def __init__(self, designation='', time='',
+        distance=float('nan'),velocity=float('nan'), neo=None):
         """ Create a new `CloseApproach`."""
         #Info arguments passed to constructor onto attributes. Values to match data types.
 
@@ -101,24 +100,19 @@ class CloseApproach:
     @property
     def time_str(self):
         """Return a formatted representation of this `CloseApproach`'s approach time.
-
         The value in `self.time` should be a Python `datetime` object. While a
         `datetime` object has a string representation, the default representation
         includes seconds - significant figures that don't exist in our input
         data set.
         object's `self.time` and `datetime_to_str` representation of approach time.
         Use self.designation and self.name to build a fullname for this object."""
-
         str_time = datetime_to_str(self.time) if self.time else ''
         return str_time
-        #return datetime_to_str(self.time)
-
 
     def __str__(self):
         """Return `str(self)`string representation."""
-
         return f"A CloseApproach at {self.time_str},  '{self.neo.fullname}' approaches Earth "\
-                 f"at a distance of {self.distance:.2f} au and a velocity of {self.velocity:.2f} km/s."
+             f"at a distance of {self.distance:.2f} au and a velocity of {self.velocity:.2f} km/s."
 
     def __repr__(self):
         """Return 'repr(self)`,readable string representation of this object."""

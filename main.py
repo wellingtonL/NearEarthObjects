@@ -93,7 +93,8 @@ def make_parser():
 
     # Add the `inspect` subcommand parser.
     inspect = subparsers.add_parser('inspect',
-                                  description="Inspect an NEO by primary designation or by name.")
+                                  description="Inspect an NEO by primary,"
+                                  " designation or by name.")
     inspect.add_argument('-v', '--verbose', action='store_true',
                             help="Additionally, print all known close approaches of this NEO.")
     inspect_id = inspect.add_mutually_exclusive_group(required=True)
@@ -315,27 +316,19 @@ class NEOShell(cmd.Cmd):
         self.do_query(arg)
 
     def do_query(self, arg):
-        """Perform the `query` subcommand within the REPL session.
+        """The `query` subcommand from the command line.
+        (neo) query --date 2020-01-01
 
-        This command behaves the same as the `query` subcommand from the command
-        line. For example, to query close approaches on January 1st, 2020:
-
-            (neo) query --date 2020-01-01
-
-        You can use any of the other filters: `--start-date`, `--end-date`,
+        use any of the other filters examples: `--start-date`, `--end-date`,
         `--min-distance`, `--max-distance`, `--min-velocity`, `--max-velocity`,
         `--min-diameter`, `--max-diameter`, `--hazardous`, `--not-hazardous`.
 
-        The number of results shown can be limited to a maximum number with `--limit`:
-
-            (neo) query --limit 2
-
-        The results can be saved to a file (instead of displayed to stdout) with
-        `--outfile`:
+        Results can be limited to a maximum number--limit`:(neo) query --limit 5
+        And saved to a file `--outfile`:
 
             (neo) query --limit 5 --outfile results.csv
-            (neo) query --limit 5 --outfile results.json
-        """
+            (neo) query --limit 5 --outfile results.json"""
+
         args = self.parse_arg_with(arg, self.query)
         if not args:
             return

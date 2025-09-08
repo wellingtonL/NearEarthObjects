@@ -1,18 +1,12 @@
-"""Provide filters for querying close approaches and limit the generated results.
-`create_filters` function produces a collection of objects used by
-the `query` method to generate a stream of `CloseApproach` objects that match
-criteria. The arguments to `create_filters` are provided by
-the main module and originate from the user's command-line options.
+"""filters to query and 'limit' max results.
+query` method to generate sstream of `CloseApproach` objects that match. Arguments
+from main module and user's command-line options.
 
-This function returns a collection of instances of subclasses
+Function returns a collection of instances of subclasses
 of `AttributeFilter` - a 1-argument callable (on a `CloseApproach`) constructed
 from a comparator (from the `operator` module), a reference value, and a class
 method `get` that subclasses can override to fetch an attribute of interest from
-the supplied `CloseApproach`.
-
-The `limit` function simply limits the maximum number of values produced by an
-iterator.
-"""
+the supplied `CloseApproach`."""
 
 import operator
 from itertools import islice
@@ -22,17 +16,9 @@ class UnsupportedCriterionError(NotImplementedError):
     """A filter criterion is unsupported."""
 
 class AttributeFilter:
-    """superclass for filters on comparable attributes.
-    `AttributeFilter` search criteria.
-    A comparator operator and a reference value, and
-    
-    subclasses can override the `get` classmethod 
-    behavior to fetch a desired attribute from the given `CloseApproach`."""
+    """superclass for filters on attributes."""
 
     def __init__(self, op, value):
-        """ `AttributeFilter` from an predicate and a reference value.
-        Refer value will be supplied as the second (right-hand side)
-        argument to operator function."""
         self.op = op
         self.value = value
 
@@ -53,9 +39,8 @@ class DateFilter(AttributeFilter):
     @classmethod
     def get(cls, approach):
         """Return approach.time converted to datetime.datetime object for the date filter.
-        A CloseApproach object. Returns[datetime.datetime]: Convert time to datetime object.
-        """
-        return approach.time.date() 
+        A CloseApproach object. Returns[datetime.datetime]: Convert time to datetime object."""
+        return approach.time.date()
 
 class DistanceFilter(AttributeFilter):
     """`AttributeFilter` for the `distance` attribute."""
@@ -74,20 +59,21 @@ class VelocityFilter(AttributeFilter):
 class DiameterFilter(AttributeFilter):
     """A concrete `AttributeFilter` for the `diameter` attribute."""
     @classmethod
-    def get(cls, approach): 
-        return approach.neo.diameter 
+    def get(cls, approach):
+        return approach.neo.diameter
 
 class HazardousFilter(AttributeFilter):
-    """A concrete `AttributeFilter` for the `hazardous` attribute."""
+    """`AttributeFilter` for the `hazardous` attribute."""
     @classmethod
     def get(cls, approach):
-        """Return whether the NEO is hazardous for the hazardous filter."""
+        """Return whether the NEO is hazardous for filter."""
         return approach.neo.hazardous
 
 def create_filters(date=None, start_date=None, end_date=None,
                    distance_min=None, distance_max=None,
                    velocity_min=None, velocity_max=None,
-                   diameter_min=None, diameter_max=None, hazardous=None):
+                   diameter_min=None, diameter_max=None,
+                   hazardous=None):
 
     filters = []
 
@@ -122,7 +108,8 @@ def create_filters(date=None, start_date=None, end_date=None,
         elif key.lower() == 'hazardous' and value is not None:
             filters.append(HazardousFilter(operator.eq, value))
 
-        return filters
+    return filters
+
 def limit(iterator, n=None):
     """Produces a limited stream of values from an iterator.
     `n` is 0 or None, doesn't limit the iterator."""

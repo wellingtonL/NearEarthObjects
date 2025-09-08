@@ -25,7 +25,7 @@ def load_neos(neo_csv_path):
 
 
 def load_approaches(cad_json_path):
-    """Read data JSON file. Cad_json_path: path to file containing data about close approaches."""
+    """Read data JSON file. Cad_json_path: path to datafile."""
 
     approaches_list = []
     with open(cad_json_path, "r") as infile:
