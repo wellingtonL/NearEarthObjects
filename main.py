@@ -66,8 +66,8 @@ def date_fromisoformat(date_string):
     supporting Python 3.6+.
 
     :param date_string: A date in the format YYYY-MM-DD.
-    :return: A `datetime.date` correspondingo the given date string.
-    """
+    :return: A `datetime.date` correspondingo the given date string."""
+
     try:
         return datetime.datetime.strptime(date_string, "%Y-%m-%d").date()
     except ValueError as ex:

@@ -21,28 +21,18 @@ from itertools import islice
 class UnsupportedCriterionError(NotImplementedError):
     """A filter criterion is unsupported."""
 
-    
 class AttributeFilter:
     """superclass for filters on comparable attributes.
-    `AttributeFilter` search criteria pattern comparing some
-    attribute of a close approach (or its attached NEO) to a reference value. A   callable predicate for a `CloseApproach`
-    object satisfies the encoded criterion.
-
+    `AttributeFilter` search criteria.
     A comparator operator and a reference value, and
-    calling the filter (with __call__) executes `get(approach) OP value` (in
-    infix notation).
-
-    Concrete subclasses can override the `get` classmethod to provide custom
-    behavior to fetch a desired attribute from the given `CloseApproach`.
-    """
     
+    subclasses can override the `get` classmethod 
+    behavior to fetch a desired attribute from the given `CloseApproach`."""
+
     def __init__(self, op, value):
-        """Construct a `AttributeFilter` from an binary predicate and a reference value.
+        """ `AttributeFilter` from an predicate and a reference value.
         Refer value will be supplied as the second (right-hand side)
-        argument to the operator function. example, an `AttributeFilter`
-        with `op=operator.le` and `value=10`, when called on an approach,
-        evaluate `some_attribute <= 10`.
-        """
+        argument to operator function."""
         self.op = op
         self.value = value
 
@@ -52,15 +42,11 @@ class AttributeFilter:
 
     @classmethod
     def get(cls, approach):
-        """Get an attribute of interest from a close approach.Subclasses must override this method to get an attribute of
-        interest from the supplied `CloseApproach`, on which to evaluate this filter.
-        Return: The value of an attribute of interest, comparable to `self.value` via `self.op`.
-        """
+        """Get an attribute of interest from a close approach. Subclass to evaluate this filter."""
         raise UnsupportedCriterionError
 
     def __repr__(self):
         return f'{self.__class__.__name__}(op=operator.{self.op.__name__}, value={self.value})'
-    
 
 class DateFilter(AttributeFilter):
     """A concrete `AttributeFilter` for the `date` attribute."""
@@ -70,52 +56,41 @@ class DateFilter(AttributeFilter):
         A CloseApproach object. Returns[datetime.datetime]: Convert time to datetime object.
         """
         return approach.time.date() 
-    
-     
-class DistanceFilter(AttributeFilter): 
+
+class DistanceFilter(AttributeFilter):
     """`AttributeFilter` for the `distance` attribute."""
-    classmethod
+    @classmethod
     def get(cls, approach):
-        """Return distance of the CloseApproach object for filter.Returns: the distance of a CloseApproach.""" 
+        """Return distance of the CloseApproach object for filter.""" 
         return approach.distance
-  
-    
+
 class VelocityFilter(AttributeFilter):
     """A concrete `AttributeFilter` for the `velocity` attribute."""
     @classmethod
     def get(cls, approach):
-        """A concrete `AttributeFilter` for the `velocity` attribute. Args: A CloseApproach object. Arg:Returns the velocity of a CloseApproach."""    
+        """A concrete `AttributeFilter` for the `velocity` attribute."""    
         return approach.velocity
-    
-        
+
 class DiameterFilter(AttributeFilter):
     """A concrete `AttributeFilter` for the `diameter` attribute."""
     @classmethod
     def get(cls, approach): 
         return approach.neo.diameter 
-    
-      
+
 class HazardousFilter(AttributeFilter):
     """A concrete `AttributeFilter` for the `hazardous` attribute."""
     @classmethod
     def get(cls, approach):
-        """Return whether the NEO is hazardous for the hazardous filter.
-        Args:approach a CloseApproach object. Returns:[bool]: Returns whether the NEO is hazardous.
-        """
-        return approach.neo.hazardous 
+        """Return whether the NEO is hazardous for the hazardous filter."""
+        return approach.neo.hazardous
 
-    
-def create_filters(date=None, start_date=None, end_date=None, distance_min=None, distance_max=None,
-                       velocity_min=None, velocity_max=None, diameter_min=None, diameter_max=None, hazardous=None):
-    """Created a collection of filters from user-specified criteria.
-    Each arguments is provided by the main module with a value from the
-    user's options at the command line. 
-    The return value must be compatible with the `query` method of `NEODatabase`
-    because the main module directly passes this result to that method. A collection of `AttributeFilter`s.
-    """  
-    
+def create_filters(date=None, start_date=None, end_date=None,
+                   distance_min=None, distance_max=None,
+                   velocity_min=None, velocity_max=None,
+                   diameter_min=None, diameter_max=None, hazardous=None):
+
     filters = []
-    
+
     for key, value in locals().items():
         if key.lower() == 'date' and value:
             filters.append(DateFilter(operator.eq, value))
@@ -147,15 +122,10 @@ def create_filters(date=None, start_date=None, end_date=None, distance_min=None,
         elif key.lower() == 'hazardous' and value is not None:
             filters.append(HazardousFilter(operator.eq, value))
 
-    return filters
-
-
+        return filters
 def limit(iterator, n=None):
     """Produces a limited stream of values from an iterator.
     `n` is 0 or None, doesn't limit the iterator."""
-            
     if n == 0 or n is None:
         return islice(iterator, None)
     return islice(iterator, n)
-       
-    

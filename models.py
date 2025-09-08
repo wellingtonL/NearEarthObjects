@@ -53,11 +53,11 @@ class NearEarthObject:
             return f"{self.designation}"
         else:
             return f"{self.designation} ({self.name})"
-                                
+        
     def __str__(self):
         """Return `str(self)`."""
-        #attributes returns a readable string representation. Look at the __repr__
-        #hazard_status = 'is' if self.hazardous else 'is not':
+        # attributes returns a readable string representation. Look at the __repr__
+        
         if self.hazardous:
             return f"NEO as {self.fullname} has a diameter "\
                 f"of {self.diameter:.3f} and is potentially hazardous."
