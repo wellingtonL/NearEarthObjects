@@ -152,13 +152,10 @@ def create_filters(date=None, start_date=None, end_date=None, distance_min=None,
 
 def limit(iterator, n=None):
     """Produces a limited stream of values from an iterator.
-    `n` is 0 or None, doesn't limit the iterator.
-    n: The maximum number of values to produce.
-    yields: The first (at most) `n` values from the iterator.
-    """
+    `n` is 0 or None, doesn't limit the iterator."""
+            
     if n == 0 or n is None:
         return islice(iterator, None)
-    else:
-        return islice(iterator, n)
+    return islice(iterator, n)
        
     

@@ -11,9 +11,6 @@ extension determines which of these functions is used."""
 import csv
 import json
 
-from helpers import cd_to_datetime, datetime_to_str
-from datetime import datetime, timezone
-
 
 def write_to_csv(results, filename):
     """an iterable of `CloseApproach` objects to a CSV file. Each output row
@@ -26,7 +23,7 @@ def write_to_csv(results, filename):
     fieldnames = (
         'datetime_utc', 'distance_au', 'velocity_km_s',
         'designation', 'name', 'diameter_km', 'potentially_hazardous')
-    
+
     with open(filename,'w') as csv_outfile:
         writer_csv = csv.writer(csv_outfile)
         writer_csv.writerow(fieldnames)
@@ -54,7 +51,6 @@ def write_to_json(results, filename):
     try:
         results_outfile= []
         for approach in results:
-            
             row = {
                 'datetime_utc': approach.time_str,
                 'distance_au': approach.distance,
@@ -71,6 +67,6 @@ def write_to_json(results, filename):
 
         with open(filename, 'w') as json_outfile:
             json_outfile.write(json_object)
-            
+
     except Exception as e:
         print(f"Error writing JSON to {filename}: {e}")

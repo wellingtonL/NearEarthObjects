@@ -37,18 +37,16 @@ If needed, the script can load data from data files other than the default with
 `--neofile` or `--cadfile`.
 """
 
-import os
 import sys
 import pathlib
 import argparse
-import cmd 
+import cmd
 import datetime
-import pathlib
 import shlex
 import time
 
 from extract import load_neos, load_approaches
-from database import NEODatabase 
+from database import NEODatabase
 from filters import create_filters, limit
 from write import write_to_csv, write_to_json
 
@@ -72,8 +70,8 @@ def date_fromisoformat(date_string):
     """
     try:
         return datetime.datetime.strptime(date_string, "%Y-%m-%d").date()
-    except ValueError:
-        raise argparse.ArgumentTypeError(f"'{date_string}' is not a valid date. Use YYYY-MM-DD.")
+    except ValueError as ex:
+        raise argparse.ArgumentTypeError(f"'{date_string}' not valid date. Use YYYY-MM-DD.") from ex
 
 
 def make_parser():
@@ -108,8 +106,9 @@ def make_parser():
     query = subparsers.add_parser('query',
                                   description="Query for close approaches that "
                                               "match a collection of filters.")
-    filters = query.add_argument_group('Filters', description="Filter close approaches by their attributes "
-                                                   "or the attributes of their NEOs.") 
+    filters = query.add_argument_group('Filters',
+                                       description="Filter close approaches by their attributes "
+                                        "or the attributes of their NEOs.") 
     filters.add_argument('-d', '--date', type=date_fromisoformat,
                          help="Only return close approaches on the given date, "
                               "in YYYY-MM-DD format (e.g. 2020-12-31).")
@@ -289,10 +288,7 @@ class NEOShell(cmd.Cmd):
         # Use the ArgumentParser to parse the shell arguments.
         try:
             return parser.parse_args(args)
-        except SystemExit as err:
-            # The `parse_args` method doesn't actually surface `ArgumentError`s
-            # nor `ArgumentTypeError`s - instead, it calls its own `error`
-            # method which prints the error message and then calls `sys.exit`.
+        except SystemExit:
             return None
 
     def do_i(self, arg):
@@ -301,16 +297,10 @@ class NEOShell(cmd.Cmd):
 
     def do_inspect(self, arg):
         """Performs the `inspect` subcommand within the REPL session.
-
         Inspect an NEO by designation or by name:
-
             (neo) inspect --pdes 1P
             (neo) inspect --name Halley
-
-        Additionally, list all known close approaches:
-
-            (neo) inspect --verbose --name Eros
-        """
+            (neo) inspect --verbose --name Eros"""
         args = self.parse_arg_with(arg, self.inspect)
         if not args:
             return
@@ -379,7 +369,6 @@ class NEOShell(cmd.Cmd):
 
 def main():
     """Run the main script."""
-    
     print("Welcome to the NEO close approach explorer!")
     parser, inspect_parser, query_parser, filters, repel = make_parser()
     args = parser.parse_args()
@@ -397,4 +386,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    

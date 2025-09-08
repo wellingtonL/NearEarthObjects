@@ -7,9 +7,8 @@ from models import NearEarthObject, CloseApproach
 
 
 def load_neos(neo_csv_path):
-    """Read near-Earth object information from a CSV file. Create path to a CSV file containing data about near-Earth objects.
-    Return:list of `NearEarthObject`s.'with' keyword used with the open does exception handling and closes the CSV file
-    """
+    """NEO information from a CSV file. Path to CSV file NEOS.
+    Return:list NEOS'with' keyword used with open does err handling and closes"""    
     neo_list = []  # Create an empty list to store NEOs
     with open(neo_csv_path, 'r') as f:
         csv_reader = csv.DictReader(f)
@@ -27,12 +26,9 @@ def load_neos(neo_csv_path):
 def load_approaches(cad_json_path):
     """Read close approach data from a JSON file. Cad_json_path: A path to a JSON file containing data about close approaches.
     Return list of `CloseApproaches."""
-
-    """Creating approach dictionary wth key map
-        data dictionary loaded with keys "fields" key map & added it to list of close approaches"""
-           
+   
     approaches_list= [] 
-    with open(cad_json_path, "r") as infile: #Assigning NEOs to Approachoaches_list = []  # Create an empty list to store CloseApproaches         
+    with open(cad_json_path, "r") as infile: 
         json_file = json.load(infile)
         
         for row in json_file ['data']:
@@ -43,8 +39,4 @@ def load_approaches(cad_json_path):
             velocity=float(row[7]),  # velocity is the eighth element, convert to float
             ))
     return approaches_list
-
-
-        
-
 
